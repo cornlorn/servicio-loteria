@@ -1,0 +1,15 @@
+{
+    "name": "servicio-loteria",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "node --watch src/index.js",
+        "start": "node src/index.js"
+    },
+    "dependencies": {
+        "express": "5.1.0"
+    },
+    "devDependencies": {
+        "prettier": "3.6.2"
+    }
+}
