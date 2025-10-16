@@ -20,7 +20,9 @@ export const registrarUsuario = async (request, response) => {
                 });
         }
 
-        const { nombre, apellido, correo, contrasena } = request.body;
+        let { nombre, apellido, correo, contrasena } = request.body;
+
+        correo = correo.toLowerCase().trim();
 
         const usuarioExistente = await Usuario.findOne({ where: { correo } });
         if (usuarioExistente) {
@@ -28,6 +30,9 @@ export const registrarUsuario = async (request, response) => {
                 .status(400)
                 .json({ error: "El correo ya está registrado" });
         }
+
+        nombre = nombre.trim();
+        apellido = apellido.trim();
 
         const contrasenaHasheada = await bcrypt.hash(contrasena, 10);
 
@@ -38,8 +43,12 @@ export const registrarUsuario = async (request, response) => {
             contrasena: contrasenaHasheada,
         });
 
-        const respuesta = usuario.toJSON();
-        delete respuesta.contrasena;
+        const respuesta = {
+            id: usuario.id,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            correo: usuario.correo,
+        };
 
         response
             .status(201)

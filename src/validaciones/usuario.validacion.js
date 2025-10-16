@@ -21,6 +21,10 @@ export const validarRegistroUsuario = [
         .withMessage("La contraseña es obligatoria")
         .isLength({ min: 8 })
         .withMessage("La contraseña debe tener al menos 8 caracteres"),
+    body("permiso")
+        .optional()
+        .isIn(["admin", "empleado", "cliente"])
+        .withMessage("El rol debe ser 'admin', 'empleado' o 'cliente'"),
 ];
 
 export const validarIngresoUsuario = [

@@ -8,6 +8,10 @@ export const Usuario = sequelize.define(
         apellido: { type: DataTypes.STRING, allowNull: false },
         correo: { type: DataTypes.STRING, allowNull: false, unique: true },
         contrasena: { type: DataTypes.STRING, allowNull: false },
+        permiso: {
+            type: DataTypes.ENUM("admin", "empleado", "cliente"),
+            defaultValue: "cliente",
+        },
     },
     {
         tableName: "usuarios",
