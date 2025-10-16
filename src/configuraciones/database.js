@@ -13,7 +13,7 @@ export const database = async () => {
         await sequelize.authenticate();
         console.log("Conexión establecida con la base de datos");
 
-        await sequelize.sync({ force: false });
+        await sequelize.sync({ force: true });
         console.log("Modelos sincronizados con la base de datos");
     } catch (error) {
         console.error("Error al conectar con la base de datos:", error);

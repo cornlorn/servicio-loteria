@@ -12,8 +12,8 @@ export const Usuario = sequelize.define(
     {
         tableName: "usuarios",
         timestamps: true,
-        createdAt: "creacion",
-        updatedAt: "actualizacion",
+        createdAt: "creado",
+        updatedAt: "actualizado",
         deletedAt: false,
     },
 );
