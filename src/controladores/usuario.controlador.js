@@ -20,7 +20,7 @@ export const registrarUsuario = async (request, response) => {
                 });
         }
 
-        let { nombre, apellido, correo, contrasena } = request.body;
+        let { nombre, apellido, correo, contrasena, permiso } = request.body;
 
         correo = correo.toLowerCase().trim();
 
@@ -29,6 +29,21 @@ export const registrarUsuario = async (request, response) => {
             return response
                 .status(400)
                 .json({ error: "El correo ya está registrado" });
+        }
+
+        if (typeof permiso !== "undefined") {
+            if (!request.usuario) {
+                return response
+                    .status(401)
+                    .json({ error: "No autorizado para asignar permisos" });
+            }
+
+            const creador = await Usuario.findByPk(request.usuario.id);
+            if (!creador || creador.permiso !== "admin") {
+                return response
+                    .status(403)
+                    .json({ error: "No autorizado para asignar permisos" });
+            }
         }
 
         nombre = nombre.trim();
@@ -41,6 +56,7 @@ export const registrarUsuario = async (request, response) => {
             apellido,
             correo,
             contrasena: contrasenaHasheada,
+            permiso,
         });
 
         const respuesta = {
@@ -48,6 +64,7 @@ export const registrarUsuario = async (request, response) => {
             nombre: usuario.nombre,
             apellido: usuario.apellido,
             correo: usuario.correo,
+            permiso: usuario.permiso,
         };
 
         response
@@ -95,8 +112,13 @@ export const ingresarUsuario = async (request, response) => {
                 .json({ error: "Correo o contraseña incorrectos" });
         }
 
-        const respuesta = usuario.toJSON();
-        delete respuesta.contrasena;
+        const respuesta = {
+            id: usuario.id,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            correo: usuario.correo,
+            permiso: usuario.permiso,
+        };
 
         const token = jwt.sign(
             { id: usuario.id, correo: usuario.correo },
