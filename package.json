@@ -11,11 +11,15 @@
         "dotenv": "17.2.3",
         "express": "5.1.0",
         "express-validator": "7.2.1",
+        "jsonwebtoken": "9.0.2",
         "morgan": "1.10.1",
         "mysql2": "3.15.2",
         "sequelize": "6.37.7"
     },
     "devDependencies": {
+        "@eslint/js": "9.37.0",
+        "eslint": "9.37.0",
+        "globals": "16.4.0",
         "prettier": "3.6.2",
         "pretty-quick": "4.2.2",
         "simple-git-hooks": "2.13.1"

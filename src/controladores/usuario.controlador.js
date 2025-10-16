@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 import { Usuario } from "../modelos/usuario.modelo.js";
 
 /**
@@ -37,16 +38,68 @@ export const registrarUsuario = async (request, response) => {
             contrasena: contrasenaHasheada,
         });
 
-        const { contrasena: _, ...usuarioSinContrasena } = usuario.toJSON();
+        const respuesta = usuario.toJSON();
+        delete respuesta.contrasena;
 
         response
             .status(201)
-            .json({
-                mensaje: "Usuario registrado",
-                usuario: usuarioSinContrasena,
-            });
+            .json({ mensaje: "Usuario registrado", usuario: respuesta });
     } catch (error) {
         console.error("Error al registrar usuario:", error);
+        response.status(500).json({ error: "Error interno del servidor" });
+    }
+};
+
+/**
+ * @param {import("express").Request} request
+ * @param {import("express").Response} response
+ */
+
+export const ingresarUsuario = async (request, response) => {
+    try {
+        const errores = validationResult(request);
+        if (!errores.isEmpty()) {
+            return response
+                .status(400)
+                .json({
+                    error: "Datos de entrada inválidos",
+                    errores: errores.array().map((err) => err.msg),
+                });
+        }
+
+        const { correo, contrasena } = request.body;
+
+        const usuario = await Usuario.findOne({ where: { correo } });
+        if (!usuario) {
+            return response
+                .status(400)
+                .json({ error: "Correo o contraseña incorrectos" });
+        }
+
+        const contrasenaValida = await bcrypt.compare(
+            contrasena,
+            usuario.contrasena,
+        );
+        if (!contrasenaValida) {
+            return response
+                .status(400)
+                .json({ error: "Correo o contraseña incorrectos" });
+        }
+
+        const respuesta = usuario.toJSON();
+        delete respuesta.contrasena;
+
+        const token = jwt.sign(
+            { id: usuario.id, correo: usuario.correo },
+            process.env.JWT_SECRET,
+            { expiresIn: "24h" },
+        );
+
+        response
+            .status(200)
+            .json({ mensaje: "Ingreso exitoso", usuario: respuesta, token });
+    } catch (error) {
+        console.error("Error al ingresar usuario:", error);
         response.status(500).json({ error: "Error interno del servidor" });
     }
 };
