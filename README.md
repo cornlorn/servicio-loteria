@@ -21,6 +21,7 @@ servicio-loteria/
 ├── src/
 │   ├── configuraciones/  # Configuración de la base de datos
 │   ├── controladores/    # Lógica de las operaciones CRUD
+│   ├── middlewares/      # Middlewares
 │   ├── modelos/          # Modelos de Sequelize
 │   ├── rutas/            # Rutas de la API
 │   ├── validaciones/     # Middleware de validaciones
@@ -54,6 +55,7 @@ PORT=3000
 DB_NAME=nombre_bd
 DB_USER=usuario_bd
 DB_PASS=contrasena_bd
+JWT_SECRET=secret_key
 ```
 
 ---
