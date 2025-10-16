@@ -2,13 +2,13 @@ import { Sequelize } from "sequelize";
 
 const { DB_NAME, DB_USER, DB_PASS } = process.env;
 
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
+export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
     host: "localhost",
     dialect: "mysql",
     logging: false,
 });
 
-const database = async () => {
+export const database = async () => {
     try {
         await sequelize.authenticate();
         console.log("Conexión establecida con la base de datos");
@@ -20,5 +20,3 @@ const database = async () => {
         process.exit(1);
     }
 };
-
-export { sequelize, database };
