@@ -1,10 +1,10 @@
+import { validationResult } from "express-validator";
+import { Usuario } from "../modelos/usuario.modelo";
+
 /**
  * @param {import("express").Request} request
  * @param {import("express").Response} response
  */
-
-import { validationResult } from "express-validator";
-import { Usuario } from "../modelos/usuario.modelo";
 
 export const registrarUsuario = async (request, response) => {
     try {
